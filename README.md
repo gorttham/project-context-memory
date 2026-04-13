@@ -23,8 +23,8 @@ and what it has learned about your project and industry.
 ```bash
 cp -r memory/ /path/to/your/project/
 cp CLAUDE.md /path/to/your/project/CLAUDE.md
-mkdir -p /path/to/your/project/.claude/skills
-cp .claude/skills/memorise.md /path/to/your/project/.claude/skills/
+mkdir -p /path/to/your/project/.claude/commands
+cp .claude/commands/memorise.md /path/to/your/project/.claude/commands/
 ```
 
 If your project already has a `CLAUDE.md`, append the contents of this one to it.
@@ -69,7 +69,7 @@ memory/
     └── preferences.md        ← Coding and workflow preferences
 ```
 
-The `.claude/skills/memorise.md` file powers the `/memorise` command.
+The `.claude/commands/memorise.md` file powers the `/memorise` command.
 The `CLAUDE.md` file tells Claude to read memory at the start of every session.
 
 ---
