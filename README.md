@@ -74,6 +74,29 @@ The `CLAUDE.md` file tells Claude to read memory at the start of every session.
 
 ---
 
+## Verifying the Installation
+
+After copying the template into a project, run the verification script to confirm everything is correctly installed:
+
+```bash
+bash tests/verify.sh
+```
+
+This checks:
+- All required files are present
+- `CLAUDE.md` references the memory system and `/memorise`
+- The `/memorise` command accepts `$ARGUMENTS` for timeframe
+- Every memory file has valid Obsidian YAML frontmatter
+- `INDEX.md` has all required sections and wikilinks
+- `code-changes/README.md` has the full entry schema
+- Whether a git repo is present (optional but recommended)
+
+**37 checks, all green = ready to use.**
+
+Copy the `tests/` folder alongside the rest of the template when adopting into a new project.
+
+---
+
 ## Opening in Obsidian
 
 Point Obsidian's vault at either:
