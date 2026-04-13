@@ -110,7 +110,31 @@ Update the "Recent Code Changes" table with the 5 most recent dated entries (new
 
 Update the `updated` frontmatter field to today's date.
 
-## Step 9 — Report
+## Step 9 — Update memory/CHANGELOG.md
+
+Prepend a new entry to `memory/CHANGELOG.md` immediately above the `<!-- /memorise appends new entries above this line -->` comment:
+
+```markdown
+## YYYY-MM-DD HH:MM — `/memorise <argument>`
+
+**Timeframe:** <parsed timeframe, e.g. "last 24 hours">
+**Commits processed:** N
+**Files updated:**
+- `memory/code-changes/YYYY-MM-DD.md` — +N entries
+- `memory/context/decisions.md` — +N entries  _(omit if none)_
+- `memory/context/tech-stack.md` — +N entries  _(omit if none)_
+- `memory/context/industry.md` — +N entries  _(omit if none)_
+- `memory/INDEX.md` — updated
+
+**Skipped (already captured):** <commit hashes, or "none">
+**Note:** <"No git repo — conversation context only" if applicable, otherwise omit>
+
+---
+```
+
+Also update the `updated` frontmatter field in `memory/CHANGELOG.md` to today's date.
+
+## Step 10 — Report
 
 Output:
 
@@ -123,6 +147,7 @@ Files updated:
   - memory/context/decisions.md        (+N entries)
   - memory/context/tech-stack.md       (+N entries)
   - memory/INDEX.md                    (updated)
+  - memory/CHANGELOG.md                (logged)
 
 Skipped (already captured): <hashes if any>
 No git repo: <note if applicable>

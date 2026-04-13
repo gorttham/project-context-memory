@@ -1,12 +1,22 @@
 ---
-tags: [context, project]
+title: Project Context
+aliases:
+  - Project
+  - Project Overview
+tags:
+  - context
+  - project
+date: 2026-04-13
 updated: 2026-04-13
-related: ["[[INDEX]]", "[[tech-stack]]", "[[people]]"]
+status: active
 ---
 
 # Project Context
 
-> [!note] Fill this in during the first `/memorise` run or manually at project start.
+> [!info] Fill this in during the first `/memorise` run or manually at project start.
+> See also [[people]] for team context, [[tech-stack]] for tooling.
+
+---
 
 ## What This Project Does
 
@@ -35,5 +45,5 @@ _Not yet captured._
 
 ## Open Questions
 
-<!-- Things that are unresolved or need decisions -->
+<!-- Things that are unresolved or need decisions. See also [[decisions]] -->
 -

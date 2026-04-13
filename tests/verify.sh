@@ -27,6 +27,7 @@ required_files=(
   "CLAUDE.md"
   ".claude/commands/memorise.md"
   "memory/INDEX.md"
+  "memory/CHANGELOG.md"
   "memory/code-changes/README.md"
   "memory/context/project.md"
   "memory/context/industry.md"
@@ -69,9 +70,9 @@ echo "[ /memorise Command ]"
 cmd=".claude/commands/memorise.md"
 if [ -f "$cmd" ]; then
   if grep -q '\$ARGUMENTS' "$cmd"; then
-    pass "/memorise command uses \$ARGUMENTS for timeframe"
+    pass "/memorise uses \$ARGUMENTS for timeframe"
   else
-    fail "/memorise command does not use \$ARGUMENTS — timeframe arg won't work"
+    fail "/memorise does not use \$ARGUMENTS — timeframe arg won't work"
   fi
 
   if grep -q "memory/code-changes" "$cmd"; then
@@ -85,15 +86,22 @@ if [ -f "$cmd" ]; then
   else
     fail "/memorise does not update memory/INDEX.md"
   fi
+
+  if grep -q "memory/CHANGELOG.md" "$cmd"; then
+    pass "/memorise logs to memory/CHANGELOG.md"
+  else
+    fail "/memorise does not log to memory/CHANGELOG.md"
+  fi
 fi
 
 echo ""
 
-# ── 4. Obsidian frontmatter present in key files ──────────────────────────
-echo "[ Obsidian Compatibility ]"
+# ── 4. Obsidian frontmatter — required fields ─────────────────────────────
+echo "[ Obsidian Properties ]"
 
 obsidian_files=(
   "memory/INDEX.md"
+  "memory/CHANGELOG.md"
   "memory/context/project.md"
   "memory/context/decisions.md"
   "memory/context/tech-stack.md"
@@ -106,56 +114,94 @@ for f in "${obsidian_files[@]}"; do
   if [ -f "$f" ]; then
     first_line=$(head -1 "$f")
     if [ "$first_line" = "---" ]; then
-      pass "$f  has YAML frontmatter"
+      pass "$f  — has frontmatter"
     else
-      fail "$f  missing YAML frontmatter (first line should be ---)"
+      fail "$f  — missing frontmatter (first line must be ---)"
+    fi
+
+    if grep -q "^title:" "$f"; then
+      pass "$f  — has 'title' property"
+    else
+      fail "$f  — missing 'title' property (Obsidian uses this for display)"
+    fi
+
+    if grep -q "^aliases:" "$f"; then
+      pass "$f  — has 'aliases' property"
+    else
+      warn "$f  — no 'aliases' (optional but improves wikilink resolution)"
+    fi
+
+    if grep -q "^tags:" "$f"; then
+      pass "$f  — has 'tags' property"
+    else
+      fail "$f  — missing 'tags' property"
     fi
   fi
 done
 
 echo ""
 
-# ── 5. INDEX.md has required sections ─────────────────────────────────────
+# ── 5. INDEX.md has required sections and features ────────────────────────
 echo "[ INDEX.md Structure ]"
 
 index="memory/INDEX.md"
 if [ -f "$index" ]; then
-  for section in "Sections" "Recent Code Changes" "Tag Index" "How to Use"; do
+  for section in "Sections" "Recent Code Changes" "Tag Index" "How to Use" "Vault Map"; do
     if grep -q "## $section" "$index"; then
-      pass "INDEX.md has '## $section' section"
+      pass "INDEX.md — '## $section' section present"
     else
-      fail "INDEX.md missing '## $section' section"
+      fail "INDEX.md — missing '## $section' section"
     fi
   done
 
-  for link in "project" "industry" "tech-stack" "decisions" "people" "preferences"; do
+  for link in "project" "industry" "tech-stack" "decisions" "people" "preferences" "CHANGELOG"; do
     if grep -q "\[\[$link\]\]" "$index"; then
-      pass "INDEX.md links to [[$link]]"
+      pass "INDEX.md — links to [[$link]]"
     else
-      fail "INDEX.md missing [[$link]] wikilink"
+      fail "INDEX.md — missing [[$link]] wikilink"
     fi
   done
+
+  if grep -q '```mermaid' "$index"; then
+    pass "INDEX.md — has Mermaid vault map"
+  else
+    fail "INDEX.md — missing Mermaid vault map"
+  fi
 fi
 
 echo ""
 
-# ── 6. code-changes/README.md has schema ──────────────────────────────────
+# ── 6. CHANGELOG.md has correct structure ─────────────────────────────────
+echo "[ CHANGELOG.md Structure ]"
+
+changelog="memory/CHANGELOG.md"
+if [ -f "$changelog" ]; then
+  if grep -q "memorise appends new entries above this line" "$changelog"; then
+    pass "CHANGELOG.md — has append marker comment"
+  else
+    fail "CHANGELOG.md — missing append marker (needed for /memorise to locate insert point)"
+  fi
+fi
+
+echo ""
+
+# ── 7. code-changes/README.md has schema ──────────────────────────────────
 echo "[ code-changes Schema ]"
 
 schema="memory/code-changes/README.md"
 if [ -f "$schema" ]; then
   for term in "What changed" "Why" "Learnings" "Type"; do
     if grep -q "$term" "$schema"; then
-      pass "Schema documents '$term' field"
+      pass "Schema — '$term' field documented"
     else
-      fail "Schema missing '$term' field"
+      fail "Schema — missing '$term' field"
     fi
   done
 fi
 
 echo ""
 
-# ── 7. Optional: git repo present ─────────────────────────────────────────
+# ── 8. Optional: git repo present ─────────────────────────────────────────
 echo "[ Git Repository (optional) ]"
 
 if git rev-parse --is-inside-work-tree &>/dev/null; then

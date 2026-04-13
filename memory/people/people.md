@@ -1,23 +1,33 @@
 ---
-tags: [people, person]
+title: People
+aliases:
+  - Team
+  - Stakeholders
+  - Contributors
+tags:
+  - people
+  - person
+date: 2026-04-13
 updated: 2026-04-13
-related: ["[[INDEX]]", "[[project]]"]
+status: active
 ---
 
 # People
 
-> [!note] Team members, stakeholders, and contributors encountered during this project.
+> [!info] Team members, stakeholders, and contributors encountered during this project.
+> Referenced from [[project]] and [[preferences]].
 
-<!-- Format for each person:
+---
 
-## Name (Handle or Role)
+<!-- /memorise appends entries here. Format:
 
-- **Role:** e.g., Lead Engineer, Product Owner, Client
-- **Timezone / Location:** _(if known)_
-- **Responsibilities:** What are they responsible for?
-- **Notes:** Preferences, communication style, areas of expertise
+## Full Name #person
+**Handle / Role:** e.g., @gorttham — Lead Engineer
+**Timezone / Location:** _(if known)_
+**Responsibilities:** What are they responsible for?
+**Notes:** Preferences, communication style, areas of expertise
 
 ---
 -->
 
-_No people logged yet._
+_No people logged yet. Run `/memorise` or add manually._

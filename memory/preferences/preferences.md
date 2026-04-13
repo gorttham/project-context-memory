@@ -1,12 +1,23 @@
 ---
-tags: [preferences, workflow]
+title: Coding & Workflow Preferences
+aliases:
+  - Preferences
+  - Workflow
+  - Code Style
+tags:
+  - preferences
+  - workflow
+date: 2026-04-13
 updated: 2026-04-13
-related: ["[[INDEX]]", "[[tech-stack]]"]
+status: active
 ---
 
 # Coding & Workflow Preferences
 
-> [!note] Preferences observed or stated during sessions — code style, tooling choices, workflow habits.
+> [!info] Preferences observed or stated during sessions — code style, tooling choices, workflow habits.
+> See [[people]] for individual preferences per team member.
+
+---
 
 ## Code Style
 
@@ -20,11 +31,17 @@ _Not yet captured._
 
 ## Communication Preferences
 
-<!-- e.g., prefers inline code comments over docs, wants commit messages to explain WHY -->
+<!-- e.g., prefers inline comments over docs, wants commit messages to explain WHY -->
 _Not yet captured._
 
 ## Things to Avoid
 
-> [!warning] _(none yet)_
+> [!warning] No anti-patterns logged yet.
 
-<!-- Patterns or approaches the team has explicitly rejected -->
+<!-- Patterns or approaches the team has explicitly rejected:
+
+### Anti-pattern name
+**Why avoided:** <reason>
+**Instead, use:** <alternative>
+
+-->

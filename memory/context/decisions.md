@@ -1,24 +1,35 @@
 ---
-tags: [context, decision]
+title: Architectural & Design Decisions
+aliases:
+  - Decisions
+  - Decision Log
+  - ADR
+tags:
+  - context
+  - decision
+date: 2026-04-13
 updated: 2026-04-13
-related: ["[[INDEX]]", "[[tech-stack]]"]
+status: active
 ---
 
 # Architectural & Design Decisions
 
-> [!note] A log of decisions made during the project and the reasoning behind them.
+> [!info] A chronological log of decisions made during the project and the reasoning behind them.
+> See [[tech-stack]] for what was ultimately chosen. See [[project]] for constraints that shaped decisions.
 
-<!-- Format for each entry:
+---
 
-## YYYY-MM-DD — Decision Title
+<!-- /memorise appends entries here. Format:
 
-> [!decision] One-line summary of what was decided
+## YYYY-MM-DD — Decision Title #decision
+
+> [!abstract] One-line summary of what was decided.
 
 **Context:** What situation or problem prompted this decision?
 
 **Options considered:**
-- Option A — pros/cons
-- Option B — pros/cons
+- ==Option A== — pros / cons
+- Option B — pros / cons
 
 **Decision:** What was chosen and why.
 

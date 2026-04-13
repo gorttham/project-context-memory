@@ -1,12 +1,24 @@
 ---
-tags: [context, tech, pattern]
+title: Tech Stack & Conventions
+aliases:
+  - Tech Stack
+  - Stack
+  - Conventions
+tags:
+  - context
+  - tech
+  - pattern
+date: 2026-04-13
 updated: 2026-04-13
-related: ["[[INDEX]]", "[[decisions]]"]
+status: active
 ---
 
 # Tech Stack & Conventions
 
-> [!note] Languages, frameworks, tools, and coding conventions observed in this project.
+> [!info] Languages, frameworks, tools, and coding conventions observed in this project.
+> See [[decisions]] for why certain tools were chosen.
+
+---
 
 ## Languages & Runtimes
 
@@ -25,18 +37,31 @@ _Not yet captured._
 
 ## Conventions Observed
 
-<!-- Patterns, naming styles, file organisation rules learned from the codebase -->
+<!-- Patterns, naming styles, file organisation rules learned from the codebase.
 
-<!-- Format:
-### Convention Name
+### Convention Name #pattern
 **Observed in:** `path/to/file.ts`
-<Description of the convention>
+<Description>
+
+-->
+
+_Not yet captured._
+
+## Dependencies
+
+<!-- Key third-party dependencies and what they're used for.
+
+### package-name
+**Version:** x.x.x
+**Used for:** <what it does in this project>
+**Docs:** [link](url)
+
 -->
 
 _Not yet captured._
 
 ## Gotchas & Warnings
 
-<!-- Things that are easy to get wrong in this codebase -->
+> [!warning] No gotchas logged yet.
 
-> [!warning] _(none yet)_
+<!-- Things that are easy to get wrong in this codebase — add as discovered -->

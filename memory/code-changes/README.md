@@ -1,12 +1,19 @@
 ---
-tags: [code-changes, schema]
+title: Code Changes — Schema Reference
+aliases:
+  - Change Log Schema
+  - Code Change Format
+tags:
+  - code-changes
+  - schema
+date: 2026-04-13
 updated: 2026-04-13
 ---
 
 # Code Changes — Schema Reference
 
-Daily change logs live in this directory as `YYYY-MM-DD.md` files.
-They are created automatically by the `/memorise` command.
+> [!info] Daily change logs live in this directory as `YYYY-MM-DD.md` files, created automatically by `/memorise`.
+> See [[CHANGELOG]] for a log of when `/memorise` was run.
 
 ---
 
@@ -16,14 +23,29 @@ They are created automatically by the `/memorise` command.
 YYYY-MM-DD.md
 ```
 
-Each file covers one calendar day. If `/memorise` covers multiple days,
-it creates or appends to each relevant day's file.
+Each file covers one calendar day. If `/memorise` covers multiple days, it creates or appends to each relevant day's file.
+
+---
+
+## Daily File Template
+
+Each `YYYY-MM-DD.md` file opens with:
+
+```markdown
+---
+title: Code Changes — YYYY-MM-DD
+tags:
+  - code-changes
+date: YYYY-MM-DD
+updated: YYYY-MM-DD
+---
+
+# Code Changes — YYYY-MM-DD
+```
 
 ---
 
 ## Entry Schema
-
-Each entry within a daily log follows this structure:
 
 ```markdown
 ## HH:MM — <commit-hash-7> <short description>
@@ -39,12 +61,12 @@ Each entry within a daily log follows this structure:
 <Rationale from commit message or inferred from diff context>
 
 ### Learnings
-<Any patterns, conventions, domain knowledge, or gotchas captured>
+<Patterns, conventions, domain knowledge, or gotchas captured>
 
 ---
 ```
 
-### Type Definitions
+## Commit Type Definitions
 
 | Type | When to use |
 |------|-------------|
@@ -77,7 +99,7 @@ This was the first step toward role-based access control (RBAC).
 
 ### Learnings
 - This project uses `jose` (not `jsonwebtoken`) for JWT handling — different API
-- Middleware is registered in `src/app.ts` via `app.use()`, not in individual route files
+- Middleware is registered in `src/app.ts` via `app.use()`, not in route files
 - The team tags security-related commits with `[security]` in the message
 
 ---
