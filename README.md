@@ -18,26 +18,26 @@ and what it has learned about your project and industry.
 
 ## Adopting This in Your Project
 
-### 1. Copy the folders
+> **Do not clone this repo into your project** — it has its own `.git/`, `CLAUDE.md`, and `.claude/` that would conflict with yours. Use the installer instead.
+
+### 1. Clone this repo somewhere outside your project
 
 ```bash
-cp -r memory/ /path/to/your/project/
-cp CLAUDE.md /path/to/your/project/CLAUDE.md
-mkdir -p /path/to/your/project/.claude/commands
-cp .claude/commands/memorise.md /path/to/your/project/.claude/commands/
+git clone https://github.com/gorttham/project-context-memory.git ~/memory-template
 ```
 
-If your project already has a `CLAUDE.md`, append the contents of this one to it.
+### 2. Run the installer from your project root
 
-### 2. Initialise
-
-Open Claude Code in your project and run:
-
-```
-/memorise
+```bash
+bash ~/memory-template/install.sh /path/to/your/project
 ```
 
-Claude will scan the past 24 hours of git history and populate the memory files.
+The installer:
+- Copies `memory/` into your project (skips if already present)
+- Copies `.claude/commands/memorise.md` (skips if already present)
+- **Appends** the memory instructions to your existing `CLAUDE.md` — never overwrites
+- Copies `tests/verify.sh` so you can check the install
+- Runs all 37 verification checks automatically
 
 ### 3. Use It
 
