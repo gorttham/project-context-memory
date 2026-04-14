@@ -44,6 +44,40 @@ a new convention.
 **Test:** *"Would a new developer joining the team need to know this decision to
 understand why the codebase is the way it is?"* If yes, log it.
 
+## Tech-Stack Capture Threshold
+
+Log only if the observation introduces or confirms something a developer would need
+to look up or might get wrong without knowing:
+
+- A new language, framework, library, or tool added to the project
+- A naming convention, file pattern, or structural rule that applies project-wide
+- A tooling constraint (minimum version, required flag, known incompatibility)
+- A convention that differs from the framework's default ("we do X instead of Y")
+
+**Skip:** use of a language feature that's obvious from the code, standard library
+calls with no project-specific meaning, implementation details inside a single
+function, anything a developer would discover immediately by reading the file.
+
+**Test:** *"Would a developer unfamiliar with this project misconfigure or misuse
+this tool/pattern without this entry?"* If yes, log it.
+
+## Industry Capture Threshold
+
+Log only if the observation names or explains something that is specific to this
+business, domain, or product — not general knowledge:
+
+- Domain terms that have a specific meaning in this product ("in our system, X means...")
+- Business rules that constrain behavior ("users can only do Y if Z")
+- External systems, APIs, or partners that the codebase integrates with
+- Concepts explained in conversation that are not obvious from the code
+
+**Skip:** general programming concepts, framework documentation, terms that are
+defined by their plain English meaning, anything a developer could find in a
+public API reference without needing project-specific context.
+
+**Test:** *"Would an experienced developer, new to this domain, misunderstand how
+the system works without this entry?"* If yes, log it.
+
 ---
 
 ## Architecture
@@ -226,9 +260,26 @@ entries, Claude reports "no related decisions found" without opening any log fil
 
 ## /memorise Write Flow
 
-For each qualifying decision identified in Steps 7, 7b, 7c:
+Steps 7, 7b, and 7c each produce raw observations. After each step, classify every
+observation into one of three buckets before writing:
+
+| Bucket | What belongs here |
+|---|---|
+| **decisions** | Explicit choices between options, architectural direction, things ruled out, reversals of previous decisions, business rules that constrain the codebase |
+| **tech-stack** | Languages, frameworks, libraries, conventions, naming patterns, file structures, tooling decisions |
+| **industry** | Domain terminology, business concepts, how the company or product works, external APIs or systems, user-facing rules |
+
+An observation can belong to more than one bucket — write it to each relevant file.
+
+All three buckets apply their respective threshold before writing. If an observation
+does not clear the threshold for a bucket, skip that bucket — do not write to either
+layer for it. The thresholds differ in strictness: decisions is the tightest,
+tech-stack and industry are lighter but still filtered. Noise in the card index
+compounds over time — when in doubt, skip it.
 
 ```
+For each decisions entry:
+
 1. Get author:
    git config user.name
 
@@ -239,14 +290,34 @@ For each qualifying decision identified in Steps 7, 7b, 7c:
 
 4. Open memory/decisions-log/YYYY-MM.md
    Create with frontmatter if it does not exist.
-   Append full entry at the bottom of the file — do not modify existing entries.
+   Append full entry at the bottom — do not modify existing entries.
 
-5. Repeat for tech-stack and industry entries (without author field,
-   using lighter schema).
+For each tech-stack entry:
+
+1. Determine tags from content (#language, #framework, #convention, etc.)
+
+2. Write one-liner to memory/context/tech-stack.md:
+   YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM
+
+3. Open memory/tech-stack-log/YYYY-MM.md
+   Create with frontmatter if it does not exist.
+   Append full entry at the bottom — do not modify existing entries.
+
+For each industry entry:
+
+1. Determine tags from content (#domain, #api, #business-rule, etc.)
+
+2. Write one-liner to memory/context/industry.md:
+   YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM
+
+3. Open memory/industry-log/YYYY-MM.md
+   Create with frontmatter if it does not exist.
+   Append full entry at the bottom — do not modify existing entries.
 ```
 
-Apply decision threshold before writing. If an entry does not meet the threshold,
-skip it — do not write to either layer.
+Source reference: tag each entry with where it was found — `source: commit <hash>`,
+`source: session <uuid-prefix>`, or `source: conversation` — so entries are traceable
+back to origin if the reasoning needs to be verified later.
 
 ---
 
