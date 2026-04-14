@@ -15,6 +15,7 @@ Check whether this is the first time `/memorise` has been run in this project.
 2. If the sentinel is absent, check whether `memory/context/project.md` contains only
    placeholder text (look for `_Not yet captured._`):
    - If `project.md` has real content beyond the stub: skip Step 0
+  Note: "real content" means any text that replaced the `_Not yet captured._` stub in the "What This Project Does" section. If the file was partially filled and the sentinel is missing, proceed with the scan — Step 0c's "do not overwrite existing content" rule ensures already-filled sections are left intact.
    - If `project.md` is still placeholder-only: this is a first run — proceed with the scan
 
 **Scan procedure:**
@@ -190,7 +191,7 @@ to either layer.
 
 1. Run `git config user.name` to get the author name.
 2. Determine tags: `#architecture`, `#tooling`, `#auth`, `#api`, `#data`, etc.
-3. Append one-liner to `memory/context/decisions.md`:
+3. Append one-liner at the end of the file to `memory/context/decisions.md`:
    `YYYY-MM-DD #tag [@author] — One sentence → decisions-log/YYYY-MM`
 4. Open `memory/decisions-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
    ```
@@ -210,7 +211,7 @@ to either layer.
    **Source:** commit <hash>
    **Decision:** What was decided.
    **Context:** What situation prompted this.
-   **Options considered:**
+   **Options considered:** _(omit this field if options were not explicitly discussed)_
    - Option A — pros / cons
    - Option B — pros / cons
    **Reason:** Why this option was chosen.
@@ -222,7 +223,7 @@ to either layer.
 **For each qualifying tech-stack entry:**
 
 1. Determine tags: `#language`, `#framework`, `#convention`, `#tooling`, etc.
-2. Append one-liner to `memory/context/tech-stack.md`:
+2. Append one-liner at the end of the file to `memory/context/tech-stack.md`:
    `YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM`
 3. Open `memory/tech-stack-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
    ```
@@ -248,7 +249,7 @@ to either layer.
 **For each qualifying industry entry:**
 
 1. Determine tags: `#domain`, `#api`, `#business-rule`, `#integration`, etc.
-2. Append one-liner to `memory/context/industry.md`:
+2. Append one-liner at the end of the file to `memory/context/industry.md`:
    `YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM`
 3. Open `memory/industry-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
    ```
@@ -353,7 +354,7 @@ Apply the same classification and threshold rules from Step 7.
 **For each qualifying decisions entry from session messages:**
 
 1. Run `git config user.name` for author.
-2. Append one-liner to `memory/context/decisions.md`:
+2. Append one-liner at the end of the file to `memory/context/decisions.md`:
    `YYYY-MM-DD #tag [@author] — One sentence → decisions-log/YYYY-MM`
 3. Open `memory/decisions-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
    Append:
@@ -363,7 +364,7 @@ Apply the same classification and threshold rules from Step 7.
    **Source:** session <first-8-chars-of-uuid>
    **Decision:** What was decided.
    **Context:** What situation prompted this.
-   **Options considered:**
+   **Options considered:** _(omit this field if options were not explicitly discussed)_
    - Option A — pros / cons
    - Option B — pros / cons
    **Reason:** Why this option was chosen, in the user's own words where possible.
@@ -374,7 +375,7 @@ Apply the same classification and threshold rules from Step 7.
 
 **For each qualifying tech-stack entry:**
 
-1. Append one-liner to `memory/context/tech-stack.md`:
+1. Append one-liner at the end of the file to `memory/context/tech-stack.md`:
    `YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM`
 2. Open `memory/tech-stack-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
    Append:
@@ -389,7 +390,7 @@ Apply the same classification and threshold rules from Step 7.
 
 **For each qualifying industry entry:**
 
-1. Append one-liner to `memory/context/industry.md`:
+1. Append one-liner at the end of the file to `memory/context/industry.md`:
    `YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM`
 2. Open `memory/industry-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
    Append:
@@ -419,7 +420,7 @@ not already captured in Steps 7 or 7b. Apply the same extraction criteria as Ste
 7b-v above.
 
 Apply the same classification and threshold rules from Step 7. Use the same two-layer
-write format as Step 7b-vi, but tag source as `source: conversation` (no session UUID —
+write format as Step 7b-vi, but use `**Source:** current conversation` (no session UUID —
 current session is not yet in the JSONL files).
 
 If nothing meaningful was said beyond the code work, skip this step entirely and
@@ -491,5 +492,6 @@ No git repo: <note if applicable>
 | No Claude session directory found | Skip Step 7b, continue with 7c |
 | No commits in timeframe | Report "nothing new"; do not modify files |
 | Commit already in file | Skip; list in Skipped section |
-| Memory file missing | Create from the template above |
+| Context file missing (`decisions.md`, `tech-stack.md`, `industry.md`) | Create with minimal YAML frontmatter (title, tags, updated) and a `# Title` heading — see the installed template in `memory/context/` for the exact format |
+| Monthly log file missing (`decisions-log/YYYY-MM.md`, etc.) | Create with the frontmatter shown in the write instructions for that bucket (Step 7) |
 | Diff >20 files | Use stat summary only |
