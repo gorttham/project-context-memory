@@ -2,59 +2,37 @@
 title: Memory Index
 aliases:
   - Home
-  - Dashboard
-  - Vault Home
+  - Index
 tags:
   - index
-  - memory
-date: 2026-04-13
-updated: 2026-04-13
-status: active
+updated: 2026-04-14
+related:
+  - context/project
+  - context/decisions
+  - context/tech-stack
+  - context/industry
 ---
 
 # Memory Index
 
-> [!abstract] Vault entry point. Start here to navigate all stored context.
-> Populated by `/memorise` — run it in Claude Code to capture recent work.
+## Context
+- [[context/decisions]] — decision card index + log refs
+- [[context/tech-stack]] — stack + conventions card index + log refs
+- [[context/industry]] — domain terms + business rules card index + log refs
+- [[context/project]] — goals, constraints, stakeholders
 
----
+## Logs (read on demand)
+- [[decisions-log/]] — full decision entries by month
+- [[tech-stack-log/]] — full stack entries by month
+- [[industry-log/]] — full domain entries by month
+- [[code-changes/]] — daily code change logs
 
-## Vault Map
-
-```mermaid
-graph TD
-    INDEX["🏠 INDEX"] --> CTX["📁 context/"]
-    INDEX --> CC["📁 code-changes/"]
-    INDEX --> PPL["👥 people"]
-    INDEX --> PREF["⚙️ preferences"]
-    INDEX --> CL["📋 CHANGELOG"]
-    CTX --> P["📌 project"]
-    CTX --> I["🏭 industry"]
-    CTX --> TS["🛠 tech-stack"]
-    CTX --> D["🗂 decisions"]
-
-    click P "project"
-    click I "industry"
-    click TS "tech-stack"
-    click D "decisions"
-    click PPL "people"
-    click PREF "preferences"
-    click CL "CHANGELOG"
-```
-
----
-
-## Sections
-
-| Note | Purpose |
-|------|---------|
-| [[project]] | Project goals, constraints, stakeholders |
-| [[industry]] | Domain and industry knowledge learned |
-| [[tech-stack]] | Languages, frameworks, conventions, gotchas |
-| [[decisions]] | Architectural and design decision log |
-| [[people]] | Team members, contributors, stakeholders |
-| [[preferences]] | Coding style and workflow preferences |
-| [[CHANGELOG]] | Log of all `/memorise` runs and memory updates |
+## Find something
+- Decisions & conflicts → `context/decisions.md`
+- Tech conventions → `context/tech-stack.md`
+- Domain terms → `context/industry.md`
+- Project goals → `context/project.md`
+- What changed recently → `code-changes/YYYY-MM-DD.md`
 
 ---
 
@@ -65,32 +43,3 @@ graph TD
 | Date | Summary |
 |------|---------|
 | _(none yet)_ | Run `/memorise` to begin capturing |
-
----
-
-## Tag Index
-
-| Tag | Notes |
-|-----|-------|
-| `#decision` | [[decisions]] |
-| `#pattern` | [[tech-stack]] |
-| `#domain` | [[industry]] |
-| `#preference` | [[preferences]] |
-| `#person` | [[people]] |
-| `#tech` | [[tech-stack]] |
-| `#index` | [[INDEX]] |
-
----
-
-## How to Use
-
-```
-/memorise           capture the past 24 hours (default)
-/memorise 48h       capture the past 48 hours
-/memorise 7d        capture the past 7 days
-/memorise 2026-04-01   capture since a specific date
-```
-
-> [!tip] Open `memory/` as an Obsidian vault to browse the graph view, search tags, and navigate wikilinks interactively.
-
-_Memory is updated on demand — it is not automatic._
