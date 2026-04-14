@@ -12,10 +12,10 @@ Check whether this is the first time `/memorise` has been run in this project.
 
 1. Check if `memory/.memory-version` exists.
    - If it exists: skip Step 0 entirely and proceed to Step 1.
-2. If the sentinel is absent, check whether all context files contain only placeholder text:
-   - Read `memory/context/tech-stack.md`, `memory/context/project.md`, `memory/context/industry.md`, `memory/context/decisions.md`
-   - If ANY file contains content beyond `_Not yet captured._` stubs: skip Step 0 (project already has custom content).
-   - If ALL files are placeholder-only: this is a first run — proceed with the scan below.
+2. If the sentinel is absent, check whether `memory/context/project.md` contains only
+   placeholder text (look for `_Not yet captured._`):
+   - If `project.md` has real content beyond the stub: skip Step 0
+   - If `project.md` is still placeholder-only: this is a first run — proceed with the scan
 
 **Scan procedure:**
 
@@ -166,13 +166,110 @@ updated: YYYY-MM-DD
 2. Append the new entries.
 3. Skip any commit hash already present in the file (no duplicates).
 
-## Step 7 — Update Context Files from Git
+## Step 7 — Classify and Write from Git Observations
 
-Review the learnings from all commit entries and update where relevant:
+Review all learnings from Step 5 commit entries. For each observation, classify it
+into one or more of the three buckets and apply the threshold before writing.
+Observations that do not meet the threshold for a bucket are skipped — do not write
+to either layer.
 
-- **memory/context/decisions.md** — any commit that introduced/removed a major dependency, changed architecture, or used words like "decided", "chose", "replaced"
-- **memory/context/tech-stack.md** — any new tool, library, framework, naming convention, or file pattern observed
-- **memory/context/industry.md** — any domain-specific term, business rule, or external API referenced
+**Threshold tests:**
+- **decisions:** "Would a new developer need to know this choice to understand why
+  the codebase is the way it is?" Only: architectural choices, things ruled out,
+  reversals, business rules, meaningful tradeoffs. Skip: bug fixes, version bumps,
+  style choices with no lasting impact.
+- **tech-stack:** "Would a developer unfamiliar with this project misconfigure or
+  misuse this without knowing?" Only: new tools/frameworks, project-wide conventions,
+  tooling constraints, deviations from framework defaults. Skip: obvious code patterns,
+  standard library use, single-function implementation details.
+- **industry:** "Would a developer new to this domain misunderstand how the system
+  works without this?" Only: project-specific terms, business rules, external
+  integrations. Skip: general programming concepts, plain-English terms, public API docs.
+
+**For each qualifying decisions entry:**
+
+1. Run `git config user.name` to get the author name.
+2. Determine tags: `#architecture`, `#tooling`, `#auth`, `#api`, `#data`, etc.
+3. Append one-liner to `memory/context/decisions.md`:
+   `YYYY-MM-DD #tag [@author] — One sentence → decisions-log/YYYY-MM`
+4. Open `memory/decisions-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
+   ```
+   ---
+   title: Decisions Log — YYYY-MM
+   tags: [decisions-log]
+   month: YYYY-MM
+   updated: YYYY-MM-DD
+   ---
+
+   # Decisions Log — YYYY-MM
+   ```
+   Append this entry at the bottom — never modify existing entries:
+   ```
+   ## YYYY-MM-DD — Decision Title #tag
+   **Author:** name
+   **Source:** commit <hash>
+   **Decision:** What was decided.
+   **Context:** What situation prompted this.
+   **Options considered:**
+   - Option A — pros / cons
+   - Option B — pros / cons
+   **Reason:** Why this option was chosen.
+   **Consequences:** What this means going forward.
+
+   ---
+   ```
+
+**For each qualifying tech-stack entry:**
+
+1. Determine tags: `#language`, `#framework`, `#convention`, `#tooling`, etc.
+2. Append one-liner to `memory/context/tech-stack.md`:
+   `YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM`
+3. Open `memory/tech-stack-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
+   ```
+   ---
+   title: Tech Stack Log — YYYY-MM
+   tags: [tech-stack-log]
+   month: YYYY-MM
+   updated: YYYY-MM-DD
+   ---
+
+   # Tech Stack Log — YYYY-MM
+   ```
+   Append at the bottom:
+   ```
+   ## YYYY-MM-DD — Entry Title #tag
+   **Source:** commit <hash>
+   **Observed:** What was seen and where.
+   **Note:** Anything worth knowing for future reference.
+
+   ---
+   ```
+
+**For each qualifying industry entry:**
+
+1. Determine tags: `#domain`, `#api`, `#business-rule`, `#integration`, etc.
+2. Append one-liner to `memory/context/industry.md`:
+   `YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM`
+3. Open `memory/industry-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
+   ```
+   ---
+   title: Industry Log — YYYY-MM
+   tags: [industry-log]
+   month: YYYY-MM
+   updated: YYYY-MM-DD
+   ---
+
+   # Industry Log — YYYY-MM
+   ```
+   Append at the bottom:
+   ```
+   ## YYYY-MM-DD — Term or Concept #tag
+   **Source:** commit <hash>
+   **Observed:** What was surfaced in code or commit.
+   **Note:** Plain-language explanation in this project's domain context.
+
+   ---
+   ```
 
 ## Step 7b — Capture from Previous Sessions (JSONL)
 
@@ -249,19 +346,61 @@ Look for:
 **What to skip:** general coding questions, one-word acknowledgements, anything
 already captured from git commits in Step 7, anything already in the memory files.
 
-### 7b-vi. Write to context files
+### 7b-vi. Write to context files (two-layer)
 
-Append new entries to the relevant context file:
+Apply the same classification and threshold rules from Step 7.
 
-```markdown
-### YYYY-MM-DD — <short title> #decision
-**Source:** session <first-8-chars-of-session-uuid>
-**Decision:** <what was decided>
-**Reason:** <why, in the user's own words if possible>
-```
+**For each qualifying decisions entry from session messages:**
 
-Use `source: session <uuid-prefix>` so entries are traceable back to the raw JSONL
-if needed. Write to `decisions.md`, `industry.md`, or `tech-stack.md` as appropriate.
+1. Run `git config user.name` for author.
+2. Append one-liner to `memory/context/decisions.md`:
+   `YYYY-MM-DD #tag [@author] — One sentence → decisions-log/YYYY-MM`
+3. Open `memory/decisions-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
+   Append:
+   ```
+   ## YYYY-MM-DD — Decision Title #tag
+   **Author:** name
+   **Source:** session <first-8-chars-of-uuid>
+   **Decision:** What was decided.
+   **Context:** What situation prompted this.
+   **Options considered:**
+   - Option A — pros / cons
+   - Option B — pros / cons
+   **Reason:** Why this option was chosen, in the user's own words where possible.
+   **Consequences:** What this means going forward.
+
+   ---
+   ```
+
+**For each qualifying tech-stack entry:**
+
+1. Append one-liner to `memory/context/tech-stack.md`:
+   `YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM`
+2. Open `memory/tech-stack-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
+   Append:
+   ```
+   ## YYYY-MM-DD — Entry Title #tag
+   **Source:** session <first-8-chars-of-uuid>
+   **Observed:** What was seen in conversation.
+   **Note:** Anything worth knowing for future reference.
+
+   ---
+   ```
+
+**For each qualifying industry entry:**
+
+1. Append one-liner to `memory/context/industry.md`:
+   `YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM`
+2. Open `memory/industry-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
+   Append:
+   ```
+   ## YYYY-MM-DD — Term or Concept #tag
+   **Source:** session <first-8-chars-of-uuid>
+   **Observed:** What was surfaced in conversation.
+   **Note:** Plain-language explanation in this project's domain context.
+
+   ---
+   ```
 
 If nothing meaningful was found across all sessions, skip and note
 "no session captures" in the report.
@@ -279,8 +418,9 @@ Review the current conversation (everything exchanged in this session) for knowl
 not already captured in Steps 7 or 7b. Apply the same extraction criteria as Step
 7b-v above.
 
-Write entries tagged `source: conversation` (no session UUID — current session is
-not yet in the JSONL files).
+Apply the same classification and threshold rules from Step 7. Use the same two-layer
+write format as Step 7b-vi, but tag source as `source: conversation` (no session UUID —
+current session is not yet in the JSONL files).
 
 If nothing meaningful was said beyond the code work, skip this step entirely and
 note "no conversation captures" in the report.
