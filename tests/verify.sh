@@ -47,6 +47,24 @@ done
 
 echo ""
 
+echo "[ Required Directories ]"
+
+required_dirs=(
+  "memory/decisions-log"
+  "memory/tech-stack-log"
+  "memory/industry-log"
+)
+
+for d in "${required_dirs[@]}"; do
+  if [ -d "$d" ]; then
+    pass "$d"
+  else
+    fail "$d  ← MISSING"
+  fi
+done
+
+echo ""
+
 # ── 2. CLAUDE.md references memorise ──────────────────────────────────────
 echo "[ CLAUDE.md Content ]"
 
@@ -91,6 +109,18 @@ if [ -f "$cmd" ]; then
     pass "/memorise logs to memory/CHANGELOG.md"
   else
     fail "/memorise does not log to memory/CHANGELOG.md"
+  fi
+
+  if grep -q "decisions-log" "$cmd"; then
+    pass "/memorise references decisions-log/ (two-layer write)"
+  else
+    fail "/memorise does not reference decisions-log/ — two-layer write not implemented"
+  fi
+
+  if grep -q "tech-stack-log" "$cmd"; then
+    pass "/memorise references tech-stack-log/ (two-layer write)"
+  else
+    fail "/memorise does not reference tech-stack-log/ — two-layer write not implemented"
   fi
 fi
 
@@ -141,12 +171,12 @@ done
 
 echo ""
 
-# ── 5. INDEX.md has required sections and features ────────────────────────
+# ── 5. INDEX.md structure ─────────────────────────────────────────────────
 echo "[ INDEX.md Structure ]"
 
 index="memory/INDEX.md"
 if [ -f "$index" ]; then
-  for section in "Sections" "Recent Code Changes" "Tag Index" "How to Use" "Vault Map"; do
+  for section in "Context" "Logs" "Find something"; do
     if grep -q "## $section" "$index"; then
       pass "INDEX.md — '## $section' section present"
     else
@@ -154,20 +184,30 @@ if [ -f "$index" ]; then
     fi
   done
 
-  for link in "project" "industry" "tech-stack" "decisions" "people" "preferences" "CHANGELOG"; do
-    if grep -q "\[\[$link\]\]" "$index"; then
+  for link in "context/decisions" "context/tech-stack" "context/industry" "context/project" "decisions-log" "tech-stack-log" "industry-log" "code-changes"; do
+    if grep -q "\[\[$link" "$index"; then
       pass "INDEX.md — links to [[$link]]"
     else
       fail "INDEX.md — missing [[$link]] wikilink"
     fi
   done
-
-  if grep -q '```mermaid' "$index"; then
-    pass "INDEX.md — has Mermaid vault map"
-  else
-    fail "INDEX.md — missing Mermaid vault map"
-  fi
 fi
+
+echo ""
+
+# ── 5b. Card index format ─────────────────────────────────────────────────
+echo "[ Card Index Format ]"
+
+for f in "memory/context/decisions.md" "memory/context/tech-stack.md" "memory/context/industry.md"; do
+  if [ -f "$f" ]; then
+    base=$(basename "$f" .md)
+    if grep -q "${base}-log/" "$f" || grep -q "→ ${base}-log" "$f"; then
+      pass "$f  — contains log references"
+    else
+      warn "$f  — no log references yet (expected until /memorise runs)"
+    fi
+  fi
+done
 
 echo ""
 
