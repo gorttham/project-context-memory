@@ -4,16 +4,24 @@
 
 This project uses a persistent memory system in the `memory/` directory.
 
-### At Session Start — Read These Files
+### At Session Start
 
-Load the following in order to restore context:
+Read `memory/INDEX.md` only. Do not pre-load other files speculatively.
 
-1. `memory/INDEX.md` — overview of all memory sections
-2. `memory/context/project.md` — project goals and constraints
-3. `memory/context/tech-stack.md` — conventions and tooling
-4. `memory/code-changes/` — open the most recently dated file (YYYY-MM-DD.md)
+### Answering questions about the project
 
-If any file is missing or empty, skip it and continue.
+Load memory files on demand when the conversation makes them relevant:
+
+| Developer asks | Claude reads |
+|---|---|
+| "Any conflicts with adding X?" | `memory/context/decisions.md` → relevant `memory/decisions-log/YYYY-MM.md` |
+| "What's our approach to Y?" | `memory/context/decisions.md` + `memory/context/tech-stack.md` |
+| "What does 'Z' mean in our system?" | `memory/context/industry.md` → relevant `memory/industry-log/YYYY-MM.md` |
+| "What are the project constraints?" | `memory/context/project.md` |
+| "What changed last week?" | recent `memory/code-changes/YYYY-MM-DD.md` |
+
+When reading context files, scan the card index (one-liners) first. Only open the
+monthly log file if a matching card entry exists and you need the full detail.
 
 ### On /memorise Invocation
 
