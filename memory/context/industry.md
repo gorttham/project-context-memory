@@ -7,6 +7,9 @@ tags:
   - context
   - domain
 updated: 2026-04-14
+related:
+  - context/project
+  - context/decisions
 ---
 
 # Industry Card Index

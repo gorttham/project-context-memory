@@ -8,6 +8,9 @@ tags:
   - context
   - tech
 updated: 2026-04-14
+related:
+  - context/decisions
+  - context/project
 ---
 
 # Tech Stack Card Index
