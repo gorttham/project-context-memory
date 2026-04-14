@@ -122,6 +122,12 @@ if [ -f "$cmd" ]; then
   else
     fail "/memorise does not reference tech-stack-log/ — two-layer write not implemented"
   fi
+
+  if grep -q "industry-log" "$cmd"; then
+    pass "/memorise references industry-log/ (two-layer write)"
+  else
+    fail "/memorise does not reference industry-log/ — two-layer write not implemented"
+  fi
 fi
 
 echo ""
