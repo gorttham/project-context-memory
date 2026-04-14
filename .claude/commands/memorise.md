@@ -166,13 +166,42 @@ updated: YYYY-MM-DD
 2. Append the new entries.
 3. Skip any commit hash already present in the file (no duplicates).
 
-## Step 7 — Update Context Files
+## Step 7 — Update Context Files from Git
 
-Review the learnings from all entries and update where relevant:
+Review the learnings from all commit entries and update where relevant:
 
 - **memory/context/decisions.md** — any commit that introduced/removed a major dependency, changed architecture, or used words like "decided", "chose", "replaced"
 - **memory/context/tech-stack.md** — any new tool, library, framework, naming convention, or file pattern observed
 - **memory/context/industry.md** — any domain-specific term, business rule, or external API referenced
+
+## Step 7b — Capture from Conversation
+
+Review the current conversation (everything exchanged in this session) for knowledge
+that doesn't appear in git commits. Look for:
+
+- **Decisions:** explicit choice language — "we decided", "let's use X", "switching to Y",
+  "don't do Z because", "the rule is", "we agreed"
+- **Domain knowledge:** explanations of business concepts, industry terms, how the system
+  works ("in our system, X means...", "users do Y when Z")
+- **Constraints:** things ruled out, tradeoffs accepted, hard limits mentioned
+- **Gotchas:** edge cases surfaced, things that surprised you, "watch out for"
+
+**What to skip:** general coding discussion, explanations Claude gave, anything already
+captured from git commits in Step 7. Only capture what came from the human's messages
+— that's where the institutional knowledge lives.
+
+**How to write it:** append new entries to the relevant context file, tagged with
+`source: conversation` and today's date. Do not deduplicate against existing entries —
+let git history handle that. If nothing meaningful was said beyond the code, skip this
+step entirely and note "no conversation captures" in the report.
+
+Example entry format for decisions.md:
+```markdown
+### YYYY-MM-DD — <short title> #decision
+**Source:** conversation
+**Decision:** <what was decided>
+**Reason:** <why, in the user's own words if possible>
+```
 
 ## Step 8 — Update memory/INDEX.md
 
@@ -195,6 +224,7 @@ Prepend a new entry to `memory/CHANGELOG.md` immediately above the `<!-- /memori
 
 **Timeframe:** <parsed timeframe, e.g. "last 24 hours">
 **Commits processed:** N
+**Conversation captures:** N  _(omit if none)_
 **Files updated:**
 - `memory/code-changes/YYYY-MM-DD.md` — +N entries
 - `memory/context/decisions.md` — +N entries  _(omit if none)_

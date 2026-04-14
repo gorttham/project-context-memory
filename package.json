@@ -14,8 +14,8 @@
   "files": [
     "bin/",
     "memory/",
+    "template/",
     ".claude/commands/memorise.md",
-    "CLAUDE.md",
     "tests/verify.sh",
     "install.sh"
   ],

@@ -165,6 +165,7 @@ echo ""
 echo "[ CLAUDE.md ]"
 
 claude_dst="$TARGET/CLAUDE.md"
+claude_template="$SCRIPT_DIR/template/CLAUDE.md"
 memory_block_marker="## Memory System"
 
 if [ -f "$claude_dst" ] && grep -q "$memory_block_marker" "$claude_dst"; then
@@ -176,7 +177,7 @@ else
       echo "---"
       echo ""
     fi
-    cat "$SCRIPT_DIR/CLAUDE.md"
+    cat "$claude_template"
   } >> "$claude_dst"
 
   if [ -f "$claude_dst" ] && grep -q "$memory_block_marker" "$claude_dst"; then

@@ -249,7 +249,7 @@ if (copyFileSafe(testSrc, testDst)) {
 // 4. CLAUDE.md (append, never overwrite)
 console.log('');
 console.log('[ CLAUDE.md ]');
-const claudeSrc = path.join(TEMPLATE_DIR, 'CLAUDE.md');
+const claudeSrc = path.join(TEMPLATE_DIR, 'template', 'CLAUDE.md');
 const claudeDst = path.join(TARGET, 'CLAUDE.md');
 
 const claudeResult = appendClaudeMd(claudeSrc, claudeDst);
