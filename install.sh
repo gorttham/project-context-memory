@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # install.sh — Add the persistent memory system to an existing project.
 #
+# NOTE: This script mirrors bin/create-memory-system.js.
+# When changing the install flow, update BOTH files.
+#
 # Usage (run from anywhere, pass your project root as the argument):
 #
 #   bash install.sh /path/to/your/project

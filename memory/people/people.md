@@ -19,7 +19,7 @@ status: active
 
 ---
 
-<!-- /memorise appends entries here. Format:
+<!-- /memorise captures people mentioned in conversations. You can also add entries manually. Format:
 
 ## Full Name #person
 **Handle / Role:** e.g., @gorttham — Lead Engineer

@@ -7,6 +7,9 @@
  *
  * Cross-platform: works on macOS, Linux, and Windows native.
  * No external dependencies beyond Node.js.
+ *
+ * NOTE: This file mirrors install.sh (the bash installer).
+ * When changing the install flow, update BOTH files.
  */
 
 'use strict';
@@ -17,8 +20,8 @@ const crypto = require('crypto');
 
 // ── Colours (disabled on Windows cmd.exe without ANSI support) ────────────────
 
-const isColour = process.stdout.isTTY && process.platform !== 'win32'
-  || process.env.FORCE_COLOR;
+const isColour = (process.stdout.isTTY && process.platform !== 'win32')
+  || (process.env.FORCE_COLOR && process.env.FORCE_COLOR !== '0');
 
 const c = {
   green:  isColour ? '\x1b[32m' : '',

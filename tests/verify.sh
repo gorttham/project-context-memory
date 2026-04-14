@@ -206,11 +206,11 @@ echo "[ Card Index Format ]"
 
 for f in "memory/context/decisions.md" "memory/context/tech-stack.md" "memory/context/industry.md"; do
   if [ -f "$f" ]; then
-    base=$(basename "$f" .md)
-    if grep -q "${base}-log/" "$f" || grep -q "→ ${base}-log" "$f"; then
-      pass "$f  — contains log references"
+    # Check for actual card entries (YYYY-MM-DD date prefix), not the format description line
+    if grep -qE "^[0-9]{4}-[0-9]{2}-[0-9]{2} #" "$f"; then
+      pass "$f  — contains card entries"
     else
-      warn "$f  — no log references yet (expected until /memorise runs)"
+      warn "$f  — no entries yet (expected until /memorise runs)"
     fi
   fi
 done
@@ -243,6 +243,17 @@ if [ -f "$schema" ]; then
       fail "Schema — missing '$term' field"
     fi
   done
+fi
+
+echo ""
+
+# ── 7b. Sentinel file (created after first /memorise run) ─────────────────
+echo "[ First-Run Sentinel ]"
+
+if [ -f "memory/.memory-version" ]; then
+  pass "memory/.memory-version — first-run scan complete, codebase already indexed"
+else
+  warn "memory/.memory-version — not found (expected: run /memorise once to trigger the first-run scan)"
 fi
 
 echo ""

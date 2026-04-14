@@ -423,6 +423,33 @@ Apply the same classification and threshold rules from Step 7. Use the same two-
 write format as Step 7b-vi, but use `**Source:** current conversation` (no session UUID —
 current session is not yet in the JSONL files).
 
+**Also capture people and preferences from the current conversation:**
+
+- **People** — If any team members, stakeholders, or contributors were mentioned by
+  name or handle, append to `memory/people/people.md` using this format:
+  ```
+  ## Full Name #person
+  **Handle / Role:** e.g., @handle — role if mentioned
+  **Notes:** What was said about them (responsibilities, expertise, communication style)
+
+  ---
+  ```
+  Only add people who were meaningfully discussed — not passing mentions. Skip if the
+  person is already in the file.
+
+- **Preferences** — If any coding style, workflow, or tooling preferences were stated
+  explicitly ("I prefer X", "always use Y", "don't do Z"), append to
+  `memory/preferences/preferences.md` using this format:
+  ```
+  ## Preference: <short label> #preference
+  **Category:** coding | workflow | tooling | process
+  **Rule:** The preference as stated.
+  **Source:** current conversation
+
+  ---
+  ```
+  Apply a threshold: only log explicit stated preferences, not inferred ones.
+
 If nothing meaningful was said beyond the code work, skip this step entirely and
 note "no conversation captures" in the report.
 
@@ -455,6 +482,8 @@ Prepend a new entry to `memory/CHANGELOG.md` immediately above the `<!-- /memori
 - `memory/context/decisions.md` — +N entries  _(omit if none)_
 - `memory/context/tech-stack.md` — +N entries  _(omit if none)_
 - `memory/context/industry.md` — +N entries  _(omit if none)_
+- `memory/people/people.md` — +N entries  _(omit if none)_
+- `memory/preferences/preferences.md` — +N entries  _(omit if none)_
 - `memory/INDEX.md` — updated
 
 **Skipped (already captured):** <commit hashes, or "none">
@@ -474,11 +503,13 @@ Output:
 
 Commits processed: N
 Files updated:
-  - memory/code-changes/YYYY-MM-DD.md  (+N entries)
-  - memory/context/decisions.md        (+N entries)
-  - memory/context/tech-stack.md       (+N entries)
-  - memory/INDEX.md                    (updated)
-  - memory/CHANGELOG.md                (logged)
+  - memory/code-changes/YYYY-MM-DD.md      (+N entries)
+  - memory/context/decisions.md            (+N entries)
+  - memory/context/tech-stack.md           (+N entries)
+  - memory/people/people.md                (+N entries, if any)
+  - memory/preferences/preferences.md      (+N entries, if any)
+  - memory/INDEX.md                        (updated)
+  - memory/CHANGELOG.md                    (logged)
 
 Skipped (already captured): <hashes if any>
 No git repo: <note if applicable>

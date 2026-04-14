@@ -17,7 +17,6 @@ updated: 2026-04-13
 
 ---
 
-%%CHANGELOG_ENTRIES%%
 <!-- /memorise appends new entries above this line. Do not remove this comment. -->
 
 _No runs recorded yet. Run `/memorise` in Claude Code to begin._

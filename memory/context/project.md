@@ -6,7 +6,6 @@ aliases:
 tags:
   - context
   - project
-date: 2026-04-13
 updated: 2026-04-13
 status: active
 ---
