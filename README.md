@@ -18,9 +18,7 @@ This system fixes that. It stores project knowledge as plain markdown files in y
 
 **1. Your git history** — When you run `/memorise`, Claude reads your recent commits, extracts what changed and why, and writes structured entries to `memory/code-changes/`. It also updates `memory/context/` with any decisions, new tools, or domain terms it spots in commit messages and diffs.
 
-**2. Your conversation** — At the same time, `/memorise` reviews what was discussed in the current session and captures anything that doesn't show up in git: business rules you explained, tradeoffs you talked through, gotchas you surfaced. The conversation is already in Claude's context — no notes needed during the session.
-
-> **Important:** conversation capture only works if you run `/memorise` before closing the terminal. Once a session ends, the conversation is gone. Git history is always available regardless — so if you forget to run `/memorise`, the code changes are still captured next time you run it. Only the spoken context from that session is lost.
+**2. Your conversations** — `/memorise` reads Claude Code's saved session files on disk (`~/.claude/projects/`) to extract domain knowledge from your past conversations — decisions explained, business rules discussed, constraints agreed on. It tracks which sessions have already been processed, so re-running never double-captures. This works even if you closed the terminal without running `/memorise` first.
 
 **3. Your codebase** — On the very first `/memorise` run, Claude scans your project root (package.json, go.mod, pyproject.toml, etc.) and README to pre-populate `tech-stack.md` and `project.md`. You get a head start instead of blank files.
 
@@ -91,7 +89,7 @@ bash ~/memory-template/install.sh .
 /memorise 2026-04-01  # capture since a specific date
 ```
 
-Run it before closing your terminal — that's when both sources are available. Claude will mine your git history and review the current conversation, then update the memory files. If you only have git commits (no conversation to capture), that's still useful — just run it next session.
+Run it whenever you want to save what was done. Claude mines your git history, reads any past sessions it hasn't processed yet, and reviews the current conversation — then updates the memory files. You don't need to remember to run it before closing.
 
 ---
 

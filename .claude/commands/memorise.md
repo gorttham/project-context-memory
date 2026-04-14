@@ -174,34 +174,116 @@ Review the learnings from all commit entries and update where relevant:
 - **memory/context/tech-stack.md** — any new tool, library, framework, naming convention, or file pattern observed
 - **memory/context/industry.md** — any domain-specific term, business rule, or external API referenced
 
-## Step 7b — Capture from Conversation
+## Step 7b — Capture from Previous Sessions (JSONL)
 
-Review the current conversation (everything exchanged in this session) for knowledge
-that doesn't appear in git commits. Look for:
+Claude Code saves every conversation to disk. This step reads those files to capture
+domain knowledge from sessions where `/memorise` was not run before closing — so
+nothing is lost even if the terminal was closed unexpectedly.
 
-- **Decisions:** explicit choice language — "we decided", "let's use X", "switching to Y",
-  "don't do Z because", "the rule is", "we agreed"
-- **Domain knowledge:** explanations of business concepts, industry terms, how the system
-  works ("in our system, X means...", "users do Y when Z")
+### 7b-i. Find the session directory
+
+Run:
+```bash
+git rev-parse --show-toplevel 2>/dev/null || pwd
+```
+
+Take the output path and compute the Claude project directory name:
+- Replace every `:` with `-`
+- Replace every `\` and `/` with `-`
+- Remove any leading `-`
+
+Examples:
+- `C:\Users\Gordon\Desktop\myapp` → `C--Users-Gordon-Desktop-myapp`
+- `/Users/gordon/projects/myapp` → `Users-gordon-projects-myapp`
+
+Look for this directory under `~/.claude/projects/`. If it does not exist, skip this
+step entirely.
+
+### 7b-ii. Load the already-processed session list
+
+Read `memory/.memorise-sessions` if it exists. This file contains one session UUID
+per line — sessions already captured in a previous `/memorise` run. Skip any JSONL
+file whose filename (without `.jsonl`) appears in this list.
+
+### 7b-iii. Find JSONL files within the timeframe
+
+List all `*.jsonl` files in the session directory. Filter to files whose last-modified
+time falls within the `/memorise` timeframe (same window used for git log in Step 3).
+
+```bash
+find ~/.claude/projects/<hash> -name "*.jsonl" -newer /tmp/memorise-since-ref
+```
+
+To create the reference file for `-newer`:
+```bash
+touch -t <YYYYMMDDHHMI> /tmp/memorise-since-ref
+```
+
+Skip files already in the processed list from 7b-ii.
+
+### 7b-iv. Extract human messages
+
+For each qualifying JSONL file, read it line by line. Parse each line as JSON.
+Keep only lines where:
+- `"type": "user"` AND
+- `message.content` is a plain string (not an array — arrays contain tool results
+  and file pastes, not natural language) AND
+- `message.content` length is at least 30 characters (skip short replies like
+  "yes", "ok", "do it", "push it")
+
+Collect all matching `message.content` strings from all qualifying files, grouped
+by session (filename = session UUID).
+
+### 7b-v. Extract knowledge
+
+Review the collected messages for knowledge that does not appear in git commits.
+Look for:
+
+- **Decisions:** explicit choice language — "we decided", "let's use X",
+  "switching to Y", "don't do Z because", "the rule is", "we agreed"
+- **Domain knowledge:** explanations of business concepts, industry terms, how
+  the system works ("in our system, X means...", "users do Y when Z")
 - **Constraints:** things ruled out, tradeoffs accepted, hard limits mentioned
 - **Gotchas:** edge cases surfaced, things that surprised you, "watch out for"
 
-**What to skip:** general coding discussion, explanations Claude gave, anything already
-captured from git commits in Step 7. Only capture what came from the human's messages
-— that's where the institutional knowledge lives.
+**What to skip:** general coding questions, one-word acknowledgements, anything
+already captured from git commits in Step 7, anything already in the memory files.
 
-**How to write it:** append new entries to the relevant context file, tagged with
-`source: conversation` and today's date. Do not deduplicate against existing entries —
-let git history handle that. If nothing meaningful was said beyond the code, skip this
-step entirely and note "no conversation captures" in the report.
+### 7b-vi. Write to context files
 
-Example entry format for decisions.md:
+Append new entries to the relevant context file:
+
 ```markdown
 ### YYYY-MM-DD — <short title> #decision
-**Source:** conversation
+**Source:** session <first-8-chars-of-session-uuid>
 **Decision:** <what was decided>
 **Reason:** <why, in the user's own words if possible>
 ```
+
+Use `source: session <uuid-prefix>` so entries are traceable back to the raw JSONL
+if needed. Write to `decisions.md`, `industry.md`, or `tech-stack.md` as appropriate.
+
+If nothing meaningful was found across all sessions, skip and note
+"no session captures" in the report.
+
+### 7b-vii. Mark sessions as processed
+
+Append each successfully-processed session UUID (one per line) to
+`memory/.memorise-sessions`. Create the file if it does not exist.
+
+This prevents double-capture on future `/memorise` runs.
+
+## Step 7c — Capture from Current Conversation
+
+Review the current conversation (everything exchanged in this session) for knowledge
+not already captured in Steps 7 or 7b. Apply the same extraction criteria as Step
+7b-v above.
+
+Write entries tagged `source: conversation` (no session UUID — current session is
+not yet in the JSONL files).
+
+If nothing meaningful was said beyond the code work, skip this step entirely and
+note "no conversation captures" in the report.
 
 ## Step 8 — Update memory/INDEX.md
 
@@ -224,6 +306,8 @@ Prepend a new entry to `memory/CHANGELOG.md` immediately above the `<!-- /memori
 
 **Timeframe:** <parsed timeframe, e.g. "last 24 hours">
 **Commits processed:** N
+**Sessions scanned:** N  _(omit if none found)_
+**Session captures:** N  _(omit if none)_
 **Conversation captures:** N  _(omit if none)_
 **Files updated:**
 - `memory/code-changes/YYYY-MM-DD.md` — +N entries
@@ -263,7 +347,8 @@ No git repo: <note if applicable>
 
 | Situation | Action |
 |-----------|--------|
-| No git repo | Capture from conversation context only |
+| No git repo | Skip Steps 2–7, proceed with session capture (7b) and conversation capture (7c) |
+| No Claude session directory found | Skip Step 7b, continue with 7c |
 | No commits in timeframe | Report "nothing new"; do not modify files |
 | Commit already in file | Skip; list in Skipped section |
 | Memory file missing | Create from the template above |
