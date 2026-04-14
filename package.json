@@ -1,0 +1,25 @@
+{
+  "name": "create-memory-system",
+  "version": "1.0.0",
+  "description": "Portable persistent memory system for Claude Code projects. Accumulates institutional knowledge across sessions.",
+  "keywords": ["claude", "claude-code", "memory", "ai", "developer-tools"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gorttham/project-context-memory.git"
+  },
+  "bin": {
+    "create-memory-system": "./bin/create-memory-system.js"
+  },
+  "files": [
+    "bin/",
+    "memory/",
+    ".claude/commands/memorise.md",
+    "CLAUDE.md",
+    "tests/verify.sh",
+    "install.sh"
+  ],
+  "engines": {
+    "node": ">=16"
+  }
+}

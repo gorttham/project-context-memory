@@ -4,6 +4,82 @@ Timeframe argument: $ARGUMENTS (default: 24h if empty)
 
 Follow these steps exactly:
 
+## Step 0 — First-Run Codebase Scan
+
+Check whether this is the first time `/memorise` has been run in this project.
+
+**Detection (two-layer):**
+
+1. Check if `memory/.memory-version` exists.
+   - If it exists: skip Step 0 entirely and proceed to Step 1.
+2. If the sentinel is absent, check whether all context files contain only placeholder text:
+   - Read `memory/context/tech-stack.md`, `memory/context/project.md`, `memory/context/industry.md`, `memory/context/decisions.md`
+   - If ANY file contains content beyond `_Not yet captured._` stubs: skip Step 0 (project already has custom content).
+   - If ALL files are placeholder-only: this is a first run — proceed with the scan below.
+
+**Scan procedure:**
+
+### 0a. Detect tech stack
+
+Check for the following files in the project root (use the Read tool — do not run shell commands):
+
+| File | What to extract |
+|------|----------------|
+| `package.json` | `name`, `description`, `dependencies` (fall back to `devDependencies` if empty) |
+| `pyproject.toml` | project name, `[tool.poetry.dependencies]` or `[project.dependencies]` |
+| `requirements.txt` | top 5 packages by line order |
+| `go.mod` | module name, Go version |
+| `Cargo.toml` | `[package]` name, `[dependencies]` |
+| `Gemfile` | `gem` entries (top 5) |
+| `pom.xml` | `<artifactId>`, `<groupId>`, key `<dependency>` entries |
+| `build.gradle` | project name, `dependencies {}` block (top 5) |
+| `*.csproj` | `<RootNamespace>`, `<PackageReference>` entries |
+
+Read whichever files are present. Stop after the first match per ecosystem (don't double-count `package.json` + `pyproject.toml` as two separate stacks unless both are genuinely present).
+
+### 0b. Extract README description
+
+Try `README.md` first, then `README.rst`, then `README.txt`, then `README`.
+
+- Read the file.
+- Find the first H2 heading (`## ` in markdown, or a line of `=====` underline in RST).
+- Take everything before that heading as the project description.
+- If no H2 exists: take the first 10 lines.
+- If the first H2 appears within the first 3 lines (no description before it): take 10 lines after the H2.
+- If no README exists: leave the description blank.
+
+### 0c. Write to memory files
+
+**Update `memory/context/tech-stack.md`:**
+
+Replace `_Not yet captured._` in the relevant sections:
+- **Languages & Runtimes**: primary language + version if detectable
+- **Frameworks & Libraries**: top dependencies from detected package file
+- **Dependencies**: key entries with what they're used for (infer from package name if not documented)
+
+Do not overwrite existing content — only replace placeholder stubs.
+
+**Update `memory/context/project.md`:**
+
+Replace `_Not yet captured._` in:
+- **What This Project Does**: project description extracted from README (or package.json `description` field)
+
+If `package.json` has a `name` field, use it to set the project name in the H1 heading or a note at the top.
+
+### 0d. Write sentinel
+
+After the scan completes (even if some files had no content to extract), write:
+
+```
+memory/.memory-version
+```
+
+Contents: the single line `v1.0` (or the version from `memory/.memory-version` in the template if present — this lets future updates detect version drift).
+
+**Recovery note (for the developer):** If the scan ran but produced incorrect results, delete `memory/.memory-version` and run `/memorise` again to re-trigger the scan.
+
+---
+
 ## Step 1 — Parse Timeframe
 
 Use the value of $ARGUMENTS:
