@@ -26,14 +26,20 @@ This system fixes that. It stores project knowledge as plain markdown files in y
 
 ```
 memory/
-├── INDEX.md                  ← Obsidian vault home, links to everything
+├── INDEX.md                  ← Navigation map, loaded at session start
 ├── code-changes/
 │   └── YYYY-MM-DD.md         ← Daily log: what changed, why, what was learned
 ├── context/
 │   ├── project.md            ← Project goals and constraints
-│   ├── industry.md           ← Domain knowledge and business rules
-│   ├── tech-stack.md         ← Languages, frameworks, conventions
-│   └── decisions.md          ← Architectural decisions with reasoning
+│   ├── industry.md           ← Card index: domain terms, one line each
+│   ├── tech-stack.md         ← Card index: tools and conventions, one line each
+│   └── decisions.md          ← Card index: architectural decisions, one line each
+├── decisions-log/
+│   └── YYYY-MM.md            ← Full decision detail, partitioned by month
+├── tech-stack-log/
+│   └── YYYY-MM.md            ← Full tech-stack detail, partitioned by month
+├── industry-log/
+│   └── YYYY-MM.md            ← Full domain detail, partitioned by month
 ├── people/
 │   └── people.md             ← Team and stakeholders
 └── preferences/
@@ -44,7 +50,18 @@ All files are plain markdown. No database, no external services — just files y
 
 ### How Claude uses it
 
-At the start of every session, Claude reads `memory/INDEX.md`, `memory/context/project.md`, `memory/context/tech-stack.md`, and the most recent code-changes log. That's how it restores context without you having to explain anything.
+At the start of every session, Claude reads `memory/INDEX.md` only — a compact navigation map that fits in a few hundred tokens. Context files are loaded on demand when a question makes them relevant. Nothing is pre-loaded speculatively.
+
+### Querying the memory
+
+Ask Claude in plain language:
+
+- "Any conflicts with adding Redis caching?"
+- "Have we made decisions about authentication before?"
+- "What does 'idempotency key' mean in our system?"
+
+Claude reads the relevant card index, scans the one-liners, and pulls full detail from
+the monthly log only for entries that match. No manual searching — just ask.
 
 > **How is this different from Claude's built-in memory?**
 > Claude Code's built-in memory stores personal preferences across all your projects — it's per-user, not shareable. This system is *project-level*: it captures decisions, domain knowledge, and code history tied to a specific repo, committed to git so your whole team benefits.
