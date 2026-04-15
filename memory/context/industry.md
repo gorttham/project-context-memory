@@ -14,9 +14,9 @@ related:
 
 # Industry Card Index
 
-One line per domain term, business rule, or external system. Full detail in `industry-log/YYYY-MM.md`.
-Format: `YYYY-MM-DD #tag — One sentence summary → industry-log/YYYY-MM`
+One row per domain term, business rule, or external system. Full detail in `industry-log/YYYY-MM.md`. Rows are in chronological order (oldest first).
 
----
+| Date | Tags | Summary | Detail |
+|------|------|---------|--------|
 
 _No domain knowledge captured yet. Run `/memorise` to begin._

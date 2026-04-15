@@ -191,8 +191,8 @@ to either layer.
 
 1. Run `git config user.name` to get the author name.
 2. Determine tags: `#architecture`, `#tooling`, `#auth`, `#api`, `#data`, etc.
-3. Append one-liner at the end of the file to `memory/context/decisions.md`:
-   `YYYY-MM-DD #tag [@author] — One sentence → decisions-log/YYYY-MM`
+3. Append a new row at the bottom of the table in `memory/context/decisions.md`:
+   `| YYYY-MM-DD | #tag | @author | One sentence | [YYYY-MM](../decisions-log/YYYY-MM) |`
 4. Open `memory/decisions-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
    ```
    ---
@@ -223,8 +223,8 @@ to either layer.
 **For each qualifying tech-stack entry:**
 
 1. Determine tags: `#language`, `#framework`, `#convention`, `#tooling`, etc.
-2. Append one-liner at the end of the file to `memory/context/tech-stack.md`:
-   `YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM`
+2. Append a new row at the bottom of the table in `memory/context/tech-stack.md`:
+   `| YYYY-MM-DD | #tag | One sentence | [YYYY-MM](../tech-stack-log/YYYY-MM) |`
 3. Open `memory/tech-stack-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
    ```
    ---
@@ -249,8 +249,8 @@ to either layer.
 **For each qualifying industry entry:**
 
 1. Determine tags: `#domain`, `#api`, `#business-rule`, `#integration`, etc.
-2. Append one-liner at the end of the file to `memory/context/industry.md`:
-   `YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM`
+2. Append a new row at the bottom of the table in `memory/context/industry.md`:
+   `| YYYY-MM-DD | #tag | One sentence | [YYYY-MM](../industry-log/YYYY-MM) |`
 3. Open `memory/industry-log/YYYY-MM.md`. Create with this frontmatter if it does not exist:
    ```
    ---
@@ -354,8 +354,8 @@ Apply the same classification and threshold rules from Step 7.
 **For each qualifying decisions entry from session messages:**
 
 1. Run `git config user.name` for author.
-2. Append one-liner at the end of the file to `memory/context/decisions.md`:
-   `YYYY-MM-DD #tag [@author] — One sentence → decisions-log/YYYY-MM`
+2. Append a new row at the bottom of the table in `memory/context/decisions.md`:
+   `| YYYY-MM-DD | #tag | @author | One sentence | [YYYY-MM](../decisions-log/YYYY-MM) |`
 3. Open `memory/decisions-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
    Append:
    ```
@@ -375,8 +375,8 @@ Apply the same classification and threshold rules from Step 7.
 
 **For each qualifying tech-stack entry:**
 
-1. Append one-liner at the end of the file to `memory/context/tech-stack.md`:
-   `YYYY-MM-DD #tag — One sentence → tech-stack-log/YYYY-MM`
+1. Append a new row at the bottom of the table in `memory/context/tech-stack.md`:
+   `| YYYY-MM-DD | #tag | One sentence | [YYYY-MM](../tech-stack-log/YYYY-MM) |`
 2. Open `memory/tech-stack-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
    Append:
    ```
@@ -390,8 +390,8 @@ Apply the same classification and threshold rules from Step 7.
 
 **For each qualifying industry entry:**
 
-1. Append one-liner at the end of the file to `memory/context/industry.md`:
-   `YYYY-MM-DD #tag — One sentence → industry-log/YYYY-MM`
+1. Append a new row at the bottom of the table in `memory/context/industry.md`:
+   `| YYYY-MM-DD | #tag | One sentence | [YYYY-MM](../industry-log/YYYY-MM) |`
 2. Open `memory/industry-log/YYYY-MM.md` (create with frontmatter if absent — see Step 7 for format).
    Append:
    ```

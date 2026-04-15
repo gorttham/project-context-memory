@@ -14,10 +14,9 @@ related:
 
 # Decision Card Index
 
-One line per decision. Full detail in `decisions-log/YYYY-MM.md`.
-Format: `YYYY-MM-DD #tag [@author] — One sentence summary → decisions-log/YYYY-MM`
-Note: `[@author]` is included only in decisions — decisions are attributed choices. Tech-stack and industry entries omit author (they are observations, not choices).
+One row per decision. Full detail in `decisions-log/YYYY-MM.md`. Rows are in chronological order (oldest first). Author is included because decisions are attributed choices; tech-stack and industry entries omit it.
 
----
+| Date | Tags | Author | Summary | Detail |
+|------|------|--------|---------|--------|
 
 _No decisions logged yet. Run `/memorise` to capture decisions from git history._
